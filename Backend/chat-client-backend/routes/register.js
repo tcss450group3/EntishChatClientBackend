@@ -38,7 +38,7 @@ router.post('/', (req, res) => {
             res.send({
                 success: false,
                 input: req.body,
-                error: "The email adderss is invalid."
+                error: "The email address is invalid."
             });
         }
 
