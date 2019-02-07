@@ -32,6 +32,26 @@ router.post('/', (req, res) => {
     passwordOK = false;
     if (password.toString < 6 )
     if(first && last && username && email && password) {
+        
+        
+        if(!email.includes("@")){
+            res.send({
+                success: false,
+                input: req.body,
+                error: "The email adderss is invalid."
+            });
+        }
+
+        if(password.length < 7){
+            res.send({
+                success: false,
+                input: req.body,
+                error: "The password should be at least 6 digits."
+            });
+        }
+        
+       
+        
         //We're storing salted hashes to make our application more secure
         //If you're interested as to what that is, and why we should use it
         //watch this youtube video: https://www.youtube.com/watch?v=8ZtInClXe1Q
