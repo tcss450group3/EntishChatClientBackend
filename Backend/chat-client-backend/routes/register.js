@@ -38,7 +38,8 @@ router.post('/', (req, res) => {
             res.send({
                 success: false,
                 input: req.body,
-                error: "The email address is invalid."
+                error: "The email address is invalid.",
+                field: "email"
             });
         }
 
@@ -46,7 +47,8 @@ router.post('/', (req, res) => {
             res.send({
                 success: false,
                 input: req.body,
-                error: "The password should be at least 6 digits."
+                error: "The password should be at least 6 digits.",
+                field: "password"
             });
         }
         
