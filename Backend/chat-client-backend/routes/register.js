@@ -29,16 +29,56 @@ router.post('/', (req, res) => {
     var password = req.body['password'];
     //Verify that the caller supplied all the parameters
     //In js, empty strings or null values evaluate to false
-    passwordOK = false;
-    if (password.toString < 6 )
-    if(first && last && username && email && password) {
-        
+    var fieldsExist = true;
+    if(!first){
+        fieldsExist = false;
+        res.send({
+            success: false,
+            input: req.body,
+            error: "First name must not be empty.",
+            field: "first"
+        });
+    } else if(!last){
+        fieldsExist = false;
+        res.send({
+            success: false,
+            input: req.body,
+            error: "Last name must not be empty.",
+            field: "last"
+        });
+    } else if(!username){
+        fieldsExist = false;
+        res.send({
+            success: false,
+            input: req.body,
+            error: "Username must not be empty.",
+            field: "username"
+        });
+    } else if(!email){
+        fieldsExist = false;
+        res.send({
+            success: false,
+            input: req.body,
+            error: "Email must not be empty.",
+            field: "email"
+        });
+    } else if(!password){
+        fieldsExist = false;
+        res.send({
+            success: false,
+            input: req.body,
+            error: "Password must not be empty.",
+            field: "password"
+        });
+    }
+    if(fieldsExist) {
         
         if(!email.includes("@")){
             res.send({
                 success: false,
                 input: req.body,
-                error: "The email address is invalid."
+                error: "The email address is invalid.",
+                field: "email"
             });
         }
 
@@ -46,7 +86,8 @@ router.post('/', (req, res) => {
             res.send({
                 success: false,
                 input: req.body,
-                error: "The password should be at least 6 digits."
+                error: "The password should be at least 6 digits.",
+                field: "password"
             });
         }
         
@@ -78,12 +119,6 @@ router.post('/', (req, res) => {
                 success: false,
                 error: err
             });
-        });
-    } else {
-        res.send({
-            success: false,
-            input: req.body,
-            error: "Missing required user information"
         });
     }
 });
