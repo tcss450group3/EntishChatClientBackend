@@ -4,7 +4,6 @@ const express = require('express');
 //We use this create the SHA256 hash
 const crypto = require("crypto");
 
-
 //Create connection to Heroku Database
 let db = require('../utilities/utils').db;
 
@@ -13,6 +12,42 @@ let getHash = require('../utilities/utils').getHash;
 let sendEmail = require('../utilities/utils').sendEmail;
 
 var router = express.Router();
+
+var verify = 0;
+
+//End Point for confirmation of 4 digit code sent
+router.post("/confirm", (req, res) => {
+    var email = req.body['email']
+    var code = req.body['verification'];
+    db.one('SELECT verification FROM Members WHERE Email=$1', [email])
+    .then(row => {
+        let v = row['verification'];
+        console.log(v);
+        //Verifies that   the code entered by the user matches the code in the DB
+        if (v == code){
+            res.send({
+                success: true
+            })
+            // update verification to -1 
+            db.none("UPDATE Members SET verification=$1 WHERE Email=$2", [-1, email])
+            .then(() => {
+            }).catch((err) => {
+                //log the error
+                console.log(err);;
+            });
+            
+        } else {
+            // The codes must not have matched. Send error to user
+            res.send({
+                error: "The Veirification code does not match.",
+                success: false
+            })
+        }  
+    }).catch((err) => {
+        //log the error
+        console.log(err);;
+    });  
+});
 
 const bodyParser = require("body-parser");
 //This allows parsing of the body of POST requests, that are encoded in JSON
@@ -109,7 +144,18 @@ router.post('/', (req, res) => {
             res.send({
                 success: true
             });
-            sendEmail("TCSS450.group.three@gmail.com", email, "Welcome!", "<strong>Welcome to our app!</strong>");
+            db.one('SELECT MemberID FROM Members WHERE Email=$1', [email])
+            .then(row => {
+                db.none("UPDATE Members SET verification=$1 WHERE Email=$2", [verify, email])
+                .then(() => {
+                }).catch((err) => {
+                    //log the error
+                    console.log(err);;
+                });
+            });
+            let message = "<strong>Welcome to our app! Please enter your email and the following code to log in for the first time: </strong>" +verify;
+            sendEmail("TCSS450.group.three@gmail.com", email, "Welcome!", message);
+
         }).catch((err) => {
             //log the error
             console.log(err);
@@ -119,6 +165,13 @@ router.post('/', (req, res) => {
                 success: false,
                 error: err
             });
+           
+        });
+    } else {
+        res.send({
+            success: false,
+            input: req.body,
+            error: "Missing required user information"
         });
     }
 });
