@@ -171,7 +171,7 @@ router.post('/resend', (req, res) => {
             console.log(err);
             res.send({
                 success: false,
-                error: err
+                error: "Failed to update email for username " + username
             });
         });
 
@@ -181,7 +181,7 @@ router.post('/resend', (req, res) => {
         console.log(err);
         res.send({
             success: false,
-            error: err
+            error: "Invalid username"
         });
     });    
 });
@@ -205,7 +205,11 @@ router.post("/confirm", (req, res) => {
             .then(() => {
             }).catch((err) => {
                 //log the error
-                console.log(err);;
+                console.log(err);
+                res.send({
+                    success: false,
+                    error: err
+                })
             });
             
         } else {
@@ -217,7 +221,11 @@ router.post("/confirm", (req, res) => {
         }  
     }).catch((err) => {
         //log the error
-        console.log(err);;
+        console.log(err);
+        res.send({
+            error: "Must enter valid email",
+            success: false
+        })
     });  
 });
 
