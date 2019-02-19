@@ -194,7 +194,7 @@ router.post("/confirm", (req, res) => {
     db.one('SELECT verification FROM Members WHERE Email=$1', [email])
     .then(row => {
         let v = row['verification'];
-        console.log(v);
+        code = req.body['verification'];
         //Verifies that   the code entered by the user matches the code in the DB
         if (v == code){
             res.send({
@@ -211,7 +211,7 @@ router.post("/confirm", (req, res) => {
         } else {
             // The codes must not have matched. Send error to user
             res.send({
-                error: "The Veirification code does not match.",
+                error: "The Verification code does not match our records",
                 success: false
             })
         }  

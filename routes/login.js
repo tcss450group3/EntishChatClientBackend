@@ -62,7 +62,7 @@ router.post('/', (req, res) => {
                     //User not verified 
                     res.send({
                         success: false,
-                        message: "Must verify before You can login"
+                        error: "Must verify email before You can login"
                     });
                 }
  
@@ -70,7 +70,7 @@ router.post('/', (req, res) => {
                 //credentials do not match
                 res.send({
                     success: false,
-                    message: "Email / Password do not match our records "
+                    error: "Email / Password combination do not match our records "
                 });
             }
         })
