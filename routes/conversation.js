@@ -11,7 +11,7 @@ router.use(bodyParser.json());
 
 //Get all of the messages from a chat session with id chatid
 router.get("/", (req, res) => {
-    db.manyOrNone('SELECT * FROM conversation')
+    db.manyOrNone('SELECT * FROM conversations')
     //If successful, run function passed into .then()
     .then((data) => {
         res.send({
