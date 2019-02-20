@@ -157,7 +157,7 @@ router.post('/resend', (req, res) => {
             console.log(err);
             res.send({
                 success: false,
-                error: err
+                error: "Invalid username"
             });
         });
         db.none("UPDATE Members SET email=$1 WHERE username=$2", [email, username])

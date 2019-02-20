@@ -28,7 +28,9 @@ router.post('/', (req, res) => {
         db.one('SELECT Password, Salt, verification, username FROM Members WHERE Email=$1', [email])
         .then(row => { //If successful, run function passed into .then()
             let salt = row['salt'];
+
             let theirUsername = row['username'];
+            
             //Retrieve our copy of the password
             let ourSaltedHash = row['password']; 
             
