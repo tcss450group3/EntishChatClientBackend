@@ -27,6 +27,9 @@ app.use('/register', require('./routes/register.js'));
 // TODO change this 
 app.use('/phish', middleware.checkToken, require('./routes/phish.js'));
 
+app.use('/conversation', middleware.checkToken, require('./routes/conversation.js'));
+
+
 /*
  * Return HTML for the / end point. 
  * This is a nice location to document your web service API
