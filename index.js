@@ -29,6 +29,8 @@ app.use('/phish', middleware.checkToken, require('./routes/phish.js'));
 
 app.use('/conversation', middleware.checkToken, require('./routes/conversation.js'));
 
+app.use('/messaging', middleware.checkToken, require('./routes/messaging.js'));
+
 
 /*
  * Return HTML for the / end point. 
