@@ -31,6 +31,7 @@ app.use('/conversation', middleware.checkToken, require('./routes/conversation.j
 
 app.use('/messaging', middleware.checkToken, require('./routes/messaging.js'));
 
+app.use('/pushy', middleware.checkToken, require('./routes/pushy.js'));
 
 /*
  * Return HTML for the / end point. 
