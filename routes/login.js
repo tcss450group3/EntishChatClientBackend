@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
             // Retrieve the verification code and check to see if it is -1
             let isVerified = row['verification'] < 0;   
             
-            let theirID = row['MemberID'];
+            let theirID = row['memberid'];
 
             //Combined their password with our salt, then hash
             let theirSaltedHash = getHash(theirPw, salt); 
