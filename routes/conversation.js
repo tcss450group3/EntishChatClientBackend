@@ -10,9 +10,14 @@ router.use(bodyParser.json());
 //send a message to all users "in" the chat session with chatId
 
 //Get all of the messages from a chat session with id chatid
-router.get("/", (req, res) => {
-    db.manyOrNone('SELECT * FROM conversations')
-    //If successful, run function passed into .then()
+router.post("/", (req, res) => {
+    let email = req.body['email'];
+
+    let query = `SELECT conversations.chatid, conversations.name
+             FROM conversations, conversationmembers, members
+             WHERE conversations.chatid = conversationmembers.chatid AND conversationmembers.memberid = members.memberid AND
+             email = $1`
+    db.manyOrNone(query, [email])
     .then((data) => {
         res.send({
             conversation: data
