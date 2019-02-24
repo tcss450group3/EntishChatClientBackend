@@ -20,8 +20,10 @@ router.post("/new", (req, res) => {
     if(email != 0){
         db.manyOrNone('SELECT MemberID FROM MEMBERS WHERE Email = $1', [email])
         .then((data) => {
-            let MemberID_B = data.body['MemberID'];
-            db.none('INSERT INTO Connections (MemberID_A, MemberID_B, Verified) VALUES ($1, $2, 1)', [MemberID_A], [MemberID_B]) 
+            let theData = data[0];
+            let MemberID_B = theData['memberid'];
+            let params = [MemberID_A, MemberID_B];
+            db.none('INSERT INTO Connections (MemberID_A, MemberID_B, Verified) VALUES ($1, $2, 1)', params) 
             .then(() => {
                 res.send({
                     success: true
@@ -43,8 +45,10 @@ router.post("/new", (req, res) => {
     } else if(username !=0){
         db.manyOrNone('SELECT MemberID FROM MEMBERS WHERE Email = $1', [username])
         .then((data) => {
-            let MemberID_B = data.body['MemberID'];
-            db.none('INSERT INTO Connections (MemberID_A, MemberID_B, Verified) VALUES ($1, $2, 1)', [MemberID_A], [MemberID_B]) 
+            let theData = data[0];
+            let MemberID_B = theData['memberid'];
+            let params = [MemberID_A, MemberID_B];
+            db.none('INSERT INTO Connections (MemberID_A, MemberID_B, Verified) VALUES ($1, $2, 1)', params) 
             .then(() => {
                 res.send({
                     success: true
@@ -53,7 +57,7 @@ router.post("/new", (req, res) => {
                 console.log(error);
                 res.send({
                     success: false,
-                    error: error
+                    error: error,
                 })
             });
         }).catch((error) => {
