@@ -80,7 +80,7 @@ router.post("/new", (req, res) => {
 
     let connectionID = req.body['id'];
     
-    db.manyOrNone('UPDATE Connections SET Verification = -1 WHERE PrimaryKey = $1', [connectionID])
+    db.manyOrNone('UPDATE Connections SET Verified = -1 WHERE PrimaryKey = $1', [connectionID])
     .then(() => {
         res.send({
             success: true
@@ -97,7 +97,7 @@ router.post("/new", (req, res) => {
 
 router.post("/", (req, res) => {
     let id = req.body['id'];
-    db.manyOrNone('SELECT Username, verified FROM MEMBERS, CONNECTIONS WHERE MemberID = MemberID_A AND MemberID_B = $1 UNION SELECT Username, Verified FROM MEMBERS, CONNECTIONS WHERE MemberID = MemberID_B AND MemberID_A = $1 ', [id])
+    db.manyOrNone('SELECT Username, verified, PrimaryKey FROM MEMBERS, CONNECTIONS WHERE MemberID = MemberID_A AND MemberID_B = $1 UNION SELECT Username, Verified FROM MEMBERS, CONNECTIONS WHERE MemberID = MemberID_B AND MemberID_A = $1 ', [id])
     //If successful, run function passed into .then()
     .then((data) => {
         res.send({
