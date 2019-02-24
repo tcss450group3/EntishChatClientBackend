@@ -17,7 +17,7 @@ router.post("/new", (req, res) => {
     let username = req.body['username'];
     let MemberID_A = req.body['id'];
     
-    if(username == 0){
+    if(email != 0){
         db.manyOrNone('SELECT MemberID FROM MEMBERS WHERE Email = $1', [email])
         .then((data) => {
             let MemberID_B = data.body['MemberID'];
@@ -40,7 +40,7 @@ router.post("/new", (req, res) => {
                 error: error
             })
         });
-    } else {
+    } else if(username !=0){
         db.manyOrNone('SELECT MemberID FROM MEMBERS WHERE Email = $1', [username])
         .then((data) => {
             let MemberID_B = data.body['MemberID'];
@@ -63,6 +63,11 @@ router.post("/new", (req, res) => {
                 error: error
             })
         });
+    } else {
+        res.send({
+            success:false,
+            error: 'no details sent'
+        })
     }
       
  });
