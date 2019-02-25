@@ -19,26 +19,33 @@ router.post("/new", (req, res) => {
     
     if(email != 0){
         db.manyOrNone('SELECT MemberID FROM MEMBERS WHERE Email = $1', [email])
-        .then((data) => {
-            let theData = data[0];
-            let MemberID_B = theData['memberid'];
-            let params = [MemberID_A, MemberID_B];
-            db.none('INSERT INTO Connections (MemberID_A, MemberID_B, Verified) VALUES ($1, $2, 1)', params) 
-            .then(() => {
-                res.send({
-                    success: true
-                })
+            .then((data) => {
+                let theData = data[0];
+                let MemberID_B = theData['memberid'];
+                if (MemberID_A == MemberID_B) {
+                    res.send({
+                        success: false,
+                        error: 'cannot add self as connection'
+                    })
+                } else {
+                    let params = [MemberID_A, MemberID_B];
+                    db.none('INSERT INTO Connections (MemberID_A, MemberID_B, Verified) VALUES ($1, $2, 1)', params)
+                        .then(() => {
+                            res.send({
+                                success: true
+                            })
+                        }).catch((error) => {
+                            console.log(error);
+                            res.send({
+                                success: false,
+                                error: error
+                            })
+                        });
+                }
             }).catch((error) => {
                 console.log(error);
                 res.send({
                     success: false,
-                    error: error
-                })
-            });
-        }).catch((error) => {
-            console.log(error);
-            res.send({
-                success: false,
                 error: error
             })
         });
@@ -47,19 +54,26 @@ router.post("/new", (req, res) => {
         .then((data) => {
             let theData = data[0];
             let MemberID_B = theData['memberid'];
-            let params = [MemberID_A, MemberID_B];
-            db.none('INSERT INTO Connections (MemberID_A, MemberID_B, Verified) VALUES ($1, $2, 1)', params) 
-            .then(() => {
-                res.send({
-                    success: true
-                })
-            }).catch((error) => {
-                console.log(error);
+            if (MemberID_A == MemberID_B) {
                 res.send({
                     success: false,
-                    error: error,
+                    error: 'cannot add self as connection'
                 })
-            });
+            } else {
+                let params = [MemberID_A, MemberID_B];
+                db.none('INSERT INTO Connections (MemberID_A, MemberID_B, Verified) VALUES ($1, $2, 1)', params)
+                    .then(() => {
+                        res.send({
+                            success: true
+                        })
+                    }).catch((error) => {
+                        console.log(error);
+                        res.send({
+                            success: false,
+                            error: error,
+                        })
+                    });
+            }
         }).catch((error) => {
             console.log(error);
             res.send({
