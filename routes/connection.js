@@ -43,7 +43,7 @@ router.post("/new", (req, res) => {
             })
         });
     } else if(username !=0){
-        db.manyOrNone('SELECT MemberID FROM MEMBERS WHERE Email = $1', [username])
+        db.manyOrNone('SELECT MemberID FROM MEMBERS WHERE Username = $1', [username])
         .then((data) => {
             let theData = data[0];
             let MemberID_B = theData['memberid'];
