@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
     if(email && theirPw) {
 
         //Using the 'one' method means that only one row should be returned
-        db.one('SELECT Password, Salt, verification, username FROM Members WHERE Email=$1', [email])
+        db.one('SELECT Password, Salt, verification, username, MemberID FROM Members WHERE Email=$1', [email])
         .then(row => { //If successful, run function passed into .then()
             let salt = row['salt'];
 
@@ -34,7 +34,9 @@ router.post('/', (req, res) => {
             let ourSaltedHash = row['password']; 
             
             // Retrieve the verification code and check to see if it is -1
-            let isVerified = row['verification'] < 0;            
+            let isVerified = row['verification'] < 0;   
+            
+            let theirID = row['memberid'];
 
             //Combined their password with our salt, then hash
             let theirSaltedHash = getHash(theirPw, salt); 
@@ -56,7 +58,8 @@ router.post('/', (req, res) => {
                     success: true,
                     message: 'Authentication successful!',
                     token: token,
-                    username: theirUsername
+                    username: theirUsername,
+                    id: theirID
                   });
                     
                 } else {
