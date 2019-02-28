@@ -111,7 +111,11 @@ router.post("/new", (req, res) => {
 
 router.post("/get", (req, res) => {
     let id = req.body['id'];
-    db.manyOrNone('SELECT Username, verified, PrimaryKey FROM MEMBERS, CONNECTIONS WHERE MemberID = MemberID_A AND MemberID_B = $1 UNION SELECT Username, Verified, PrimaryKey FROM MEMBERS, CONNECTIONS WHERE MemberID = MemberID_B AND MemberID_A = $1 ', [id])
+    db.manyOrNone(`SELECT Username, verified, PrimaryKey, (MEMBERID_A != $1 AND verified = 1) AS "request" FROM MEMBERS, CONNECTIONS
+    WHERE MemberID = MemberID_A AND MemberID_B = $1
+    UNION 
+    SELECT Username, Verified, PrimaryKey,(MEMBERID_A != $1 AND verified = 1) AS "request" FROM MEMBERS, CONNECTIONS 
+    WHERE MemberID = MemberID_B AND MemberID_A = $1 ORDER BY request DESC, username ASC`, [id])
     //If successful, run function passed into .then()
     .then((data) => {
         res.send({
