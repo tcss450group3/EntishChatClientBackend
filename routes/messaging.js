@@ -28,7 +28,7 @@ router.post("/send", (req, res) => {
         db.manyOrNone('SELECT * FROM Push_Token')
         .then(rows => {
             rows.forEach(element => {
-                msg_functions.sendToIndividual(element['token'], message, username);
+                msg_functions.sendToIndividual(element['token'], message, username, chatId);
             });
             res.send({
                 success: true
