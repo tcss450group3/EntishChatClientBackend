@@ -6,11 +6,9 @@ var router = express.Router();
 const bodyParser = require("body-parser");
 //This allows parsing of the body of POST requests, that are encoded in JSON
 router.use(bodyParser.json());
-// let msg_functions = require('../utilities/utils').messaging;
-//send a message to all users "in" the chat session with chatId
 
-//Get all of the messages from a chat session with id chatid
 
+//add a new connection 
 router.post("/new", (req, res) => {
 
     let email = req.body['email'];
@@ -90,6 +88,8 @@ router.post("/new", (req, res) => {
       
  });
 
+ //accept a connection request
+
  router.post("/accept", (req, res) => {
 
     let connectionID = req.body['id'];
@@ -108,7 +108,7 @@ router.post("/new", (req, res) => {
     });
  });
 
-
+//get all connections that include the member's id
 router.post("/get", (req, res) => {
     let id = req.body['id'];
     db.manyOrNone(`SELECT Username, verified, PrimaryKey, (MEMBERID_A != $1 AND verified = 1) AS "request" FROM MEMBERS, CONNECTIONS
@@ -120,6 +120,22 @@ router.post("/get", (req, res) => {
     .then((data) => {
         res.send({
             connections: data
+        });
+    }).catch((error) => {
+        console.log(error);
+        res.send({
+            success: false,
+            error: error
+        })
+}); });
+
+router.post("/delete", (req, res) => {
+    let id = req.body['id'];
+    db.none(`DELETE FROM Connections WHERE PrimaryKey = $1`, [id])
+    //If successful, return true
+    .then((data) => {
+        res.send({
+            success: true
         });
     }).catch((error) => {
         console.log(error);
