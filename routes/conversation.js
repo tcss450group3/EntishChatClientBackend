@@ -70,7 +70,7 @@ router.post("/new", (req, res) => {
                 console.log(error);
                 res.send({
                 success: false,
-                    error: error
+                    error: "fail to select from conversation 2"
                 })
             });
         } else {
@@ -84,7 +84,7 @@ router.post("/new", (req, res) => {
         console.log(error);
         res.send({
         success: false,
-            error: error
+            error: "fail to select from conversation 1"
         })
     });
  });
