@@ -30,5 +30,64 @@ router.post("/", (req, res) => {
         })
 }); });
 
+router.post("/new", (req, res) => {
+
+
+    let name = req.body['name'];
+
+    let query = `SELECT * FROM CONVERSATIONS WHERE NAME=$1;`
+    db.manyOrNone(query, [name])
+    //If successful, run function passed into .then()
+    .then((data) => {
+        if(data[0] == null) {
+            // do something when chat room is not existed
+
+            let query2 = `INSERT INTO CONVERSATIONS(NAME) VALUES($1);
+            `
+            db.manyOrNone(query2, [name]);
+            let names = name.split(", ");
+
+            let query3 = `SELECT * FROM CONVERSATIONS WHERE NAME=$1;`
+            db.manyOrNone(query3, [name])
+            .then((data) => {
+                
+                var chatid = data[0]['chatid'];
+
+                for(var i =0; i<names.length; i++) {
+
+                    let query4 = `SELECT MEMBERID FROM MEMBERS WHERE USERNAME = $1;`
+                    db.manyOrNone(query4, [names[i]])
+                    .then((data) => {
+                        let query5 = `INSERT INTO CONVERSATIONMEMBERS(CHATID, MEMBERID) VALUES($1, $2)`
+                        db.manyOrNone(query5, [chatid, data[0]['memberid']])
+                    })
+                }
+
+                res.send({
+                    conversation: data
+                });
+            }).catch((error) => {
+                console.log(error);
+                res.send({
+                success: false,
+                    error: error
+                })
+            });
+        } else {
+            // do something when chat room is existed
+            res.send({
+                conversation: data
+            });
+        }
+        
+    }).catch((error) => {
+        console.log(error);
+        res.send({
+        success: false,
+            error: error
+        })
+    });
+ });
+
 
 module.exports = router;
