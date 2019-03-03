@@ -66,7 +66,7 @@ router.post("/new", (req, res) => {
             success: true
          });
 
-        sendEmail("uwnetid@uw.edu", email, "Join " + sender + "on Entish!", "Hello "
+        sendEmail("uwnetid@uw.edu", email, "Join " + sender + " n Entish!", "Hello "
          + email + "! you were invited to Entish by " + sender + " use this link to join.");
      } else {
          res.send({
