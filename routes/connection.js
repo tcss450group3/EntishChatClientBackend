@@ -2,52 +2,21 @@
 const express = require('express');
 //Create connection to Heroku Database
 let db = require('../utilities/utils').db;
+//function to send emails.
+let sendEmail = require('../utilities/utils').sendEmail;
+
 var router = express.Router();
 const bodyParser = require("body-parser");
 //This allows parsing of the body of POST requests, that are encoded in JSON
 router.use(bodyParser.json());
 
-
-//add a new connection 
+//add a new connection by username
 router.post("/new", (req, res) => {
 
-    let email = req.body['email'];
     let username = req.body['username'];
     let MemberID_A = req.body['id'];
     
-    if(email != 0){
-        db.manyOrNone('SELECT MemberID FROM MEMBERS WHERE Email = $1', [email])
-            .then((data) => {
-                let theData = data[0];
-                let MemberID_B = theData['memberid'];
-                if (MemberID_A == MemberID_B) {
-                    res.send({
-                        success: false,
-                        error: 'cannot add self as connection'
-                    })
-                } else {
-                    let params = [MemberID_A, MemberID_B];
-                    db.none('INSERT INTO Connections (MemberID_A, MemberID_B, Verified) VALUES ($1, $2, 1)', params)
-                        .then(() => {
-                            res.send({
-                                success: true
-                            })
-                        }).catch((error) => {
-                            console.log(error);
-                            res.send({
-                                success: false,
-                                error: error
-                            })
-                        });
-                }
-            }).catch((error) => {
-                console.log(error);
-                res.send({
-                    success: false,
-                error: error
-            })
-        });
-    } else if(username !=0){
+    if(username !=0){
         db.manyOrNone('SELECT MemberID FROM MEMBERS WHERE Username = $1', [username])
         .then((data) => {
             let theData = data[0];
@@ -87,6 +56,27 @@ router.post("/new", (req, res) => {
     }
       
  });
+
+ //send an fake email invitation request.
+ router.post("/email", (req, res) => {
+     let email = req.body['email'];
+     let sender = req.body['sender'];
+     if(email && email.includes("@")){
+         res.send({
+            success: true
+         });
+
+        sendEmail("uwnetid@uw.edu", email, "Join " + sender + "on Entish!", "Hello "
+         + email + "! you were invited to Entish by " + sender + " use this link to join.");
+     } else {
+         res.send({
+            success: false,
+            error: 'Recipient email was invalid'
+         });
+     }
+
+ });
+
 
  //accept a connection request
 
