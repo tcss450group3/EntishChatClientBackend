@@ -5,6 +5,8 @@ let db = require('../utilities/utils').db;
 //function to send emails.
 let sendEmail = require('../utilities/utils').sendEmail;
 
+let msg_functions = require('../utilities/utils').messaging;
+
 var router = express.Router();
 const bodyParser = require("body-parser");
 //This allows parsing of the body of POST requests, that are encoded in JSON
@@ -13,6 +15,7 @@ router.use(bodyParser.json());
 //add a new connection by username
 router.post("/new", (req, res) => {
 
+    let sender = req.body['sender'];
     let username = req.body['username'];
     let MemberID_A = req.body['id'];
     
@@ -21,15 +24,35 @@ router.post("/new", (req, res) => {
         .then((data) => {
             let theData = data[0];
             let MemberID_B = theData['memberid'];
+            let params = [MemberID_A, MemberID_B];
+            var match;
+            db.manyOrNone(`SELECT (MemberID_A = $1) AS match FROM Connections WHERE MemberID_B = $2
+                            UNION
+                            SELECT (MemberID_A = $2) AS match FROM Connections WHERE MemberID_B = $2`, params)
+            .then(rows =>{
+                rows.forEach(element => {
+                    if(element['match']) match =true;
+                });
+            });
             if (MemberID_A == MemberID_B) {
                 res.send({
                     success: false,
                     error: 'cannot add self as connection'
                 })
-            } else {
-                let params = [MemberID_A, MemberID_B];
+            } else if(match) {
+                res.send({
+                    success: false,
+                    error: 'You already have a connection with that user'
+                })  
+            }else {
                 db.none('INSERT INTO Connections (MemberID_A, MemberID_B, Verified) VALUES ($1, $2, 1)', params)
                     .then(() => {
+                        db.manyOrNone('SELECT * FROM Push_Token WHERE MemberID = $1', [MemberID_B])
+                        .then(rows => {
+                            rows.forEach(element => {
+                                msg_functions.sendRequest(element['token'], sender);
+                            });
+                        });
                         res.send({
                             success: true
                         })
