@@ -35,6 +35,8 @@ app.use('/pushy', middleware.checkToken, require('./routes/pushy.js'));
 
 app.use('/connection', middleware.checkToken, require('./routes/connection.js'));
 
+app.use('/weather', middleware.checkToken, require('./routes/weather.js'));
+
 /*
  * Return HTML for the / end point. 
  * This is a nice location to document your web service API
