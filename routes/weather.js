@@ -79,4 +79,20 @@ router.post('/forecast/hourly', (req, res) => {
     }); 
 });
 
+router.post("/favorite", (req, res) => {
+    let memberid = req.body['memberid'];   
+    let query = `SELECT * from locations
+                    WHERE memberid=$1`
+    db.manyOrNone(query, [memberid])
+    .then((rows) => {
+        res.send({
+            locations: rows
+        })
+    }).catch((err) => {
+        res.send({
+            success: false,
+    error: err })
+    });
+});
+
 module.exports = router;
