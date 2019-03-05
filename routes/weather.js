@@ -23,9 +23,9 @@ router.post("/current", (req, res) => {
     let zip = req.body['zipcode'];
     var url;
     if (zip == "") {
-        url = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lon}&key=${API_KEY}`;
+        url = `https://api.weatherbit.io/v2.0/units=[I]/current?lat=${lat}&lon=${lon}&key=${API_KEY}`;
     } else {
-        url = `https://api.weatherbit.io/v2.0/current?postal_code=${zip}&key=${API_KEY}`;
+        url = `https://api.weatherbit.io/v2.0/units=[I]/current?postal_code=${zip}&key=${API_KEY}`;
     }
 
     request(url, function (error, response, body) {
