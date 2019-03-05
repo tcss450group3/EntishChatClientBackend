@@ -31,9 +31,8 @@ router.post("/new", (req, res) => {
                             SELECT (MemberID_A = $2) AS match FROM Connections WHERE MemberID_B = $2`, params)
             .then(rows =>{
                 rows.forEach(element => {
-                    if(element['match']) match =true;
+                    if(element['match']) match = true;
                 });
-            });
             if (MemberID_A == MemberID_B) {
                 res.send({
                     success: false,
@@ -43,8 +42,8 @@ router.post("/new", (req, res) => {
                 res.send({
                     success: false,
                     error: 'You already have a connection with that user'
-                })  
-            }else {
+                });  
+            } else {
                 db.none('INSERT INTO Connections (MemberID_A, MemberID_B, Verified) VALUES ($1, $2, 1)', params)
                     .then(() => {
                         db.manyOrNone('SELECT * FROM Push_Token WHERE MemberID = $1', [MemberID_B])
@@ -64,6 +63,8 @@ router.post("/new", (req, res) => {
                         })
                     });
             }
+
+        });
         }).catch((error) => {
             console.log(error);
             res.send({

@@ -30,8 +30,8 @@ router.post("/", (req, res) => {
         })
 }); });
 
-router.post("/new", (req, res) => {
 
+router.post("/new", (req, res) => {
 
     let name = req.body['name'];
 
