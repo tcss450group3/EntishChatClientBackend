@@ -23,9 +23,9 @@ router.post("/current", (req, res) => {
     let zip = req.body['zipcode'];
     var url;
     if (zip == "") {
-        url = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lon}&key=${API_KEY}&units=[I]`;
+        url = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lon}&key=${API_KEY}&units=I`;
     } else {
-        url = `https://api.weatherbit.io/v2.0/current?postal_code=${zip}&key=${API_KEY}&units=[I]`;
+        url = `https://api.weatherbit.io/v2.0/current?postal_code=${zip}&key=${API_KEY}&units=I`;
     }
 
     request(url, function (error, response, body) {
@@ -45,9 +45,9 @@ router.post('/forecast/daily', (req, res) => {
     let zip = req.body['zipcode'];
     var url;
     if (zip == "") {
-        url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&days=10&key=${API_KEY}&units=[I]`;
+        url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&days=10&key=${API_KEY}&units=I`;
     } else {
-        url = `https://api.weatherbit.io/v2.0/forecast/daily?postal_code=${zip}&days=10&key=${API_KEY}&units=[I]`;
+        url = `https://api.weatherbit.io/v2.0/forecast/daily?postal_code=${zip}&days=10&key=${API_KEY}&units=I`;
     }
     
     request(url, function (error, response, body) {
@@ -65,9 +65,9 @@ router.post('/forecast/hourly', (req, res) => {
     let zip = req.body['zipcode'];
     var url;
     if (zip == "") {
-        url = `https://api.weatherbit.io/v2.0/forecast/hourly?lat=${lat}&lon=${lon}&hours=24&key=${API_KEY}&units=[I]`;
+        url = `https://api.weatherbit.io/v2.0/forecast/hourly?lat=${lat}&lon=${lon}&hours=24&key=${API_KEY}&units=I`;
     } else {
-        url = `https://api.weatherbit.io/v2.0/forecast/hourly?postal_code=${zip}&hours=24&key=${API_KEY}&units=[I]`;
+        url = `https://api.weatherbit.io/v2.0/forecast/hourly?postal_code=${zip}&hours=24&key=${API_KEY}&units=I`;
     }
     
     request(url, function (error, response, body) {
