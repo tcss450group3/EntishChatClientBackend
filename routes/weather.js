@@ -16,7 +16,7 @@ const bodyParser = require("body-parser");
 
 router.use(bodyParser.json());
 
-router.get("/current", (req, res) => {
+router.post("/current", (req, res) => {
 
     let lat = req.body['latitude'];
     let lon = req.body['longitude'];
@@ -39,7 +39,7 @@ router.get("/current", (req, res) => {
 });
 
 
-router.get('/forecast/daily', (req, res) => {
+router.post('/forecast/daily', (req, res) => {
     let lat = req.body['latitude'];
     let lon = req.body['longitude'];
     let zip = req.body['zipcode'];
@@ -59,7 +59,7 @@ router.get('/forecast/daily', (req, res) => {
     }); 
 });
 
-router.get('/forecast/hourly', (req, res) => {
+router.post('/forecast/hourly', (req, res) => {
     let lat = req.body['latitude'];
     let lon = req.body['longitude'];
     let zip = req.body['zipcode'];
