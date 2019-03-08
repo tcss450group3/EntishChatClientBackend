@@ -29,6 +29,7 @@ CREATE TABLE Conversations (ChatID SERIAL PRIMARY KEY,
 DROP TABLE IF EXISTS ConversationMembers;
 CREATE TABLE ConversationMembers (ChatID INT NOT NULL,
                           MemberID INT NOT NULL,
+                          Verified INT DEFAULT 0,
                           FOREIGN KEY(MemberID) REFERENCES Members(MemberID),
                           FOREIGN KEY(ChatID) REFERENCES Conversations(ChatID)
 );
