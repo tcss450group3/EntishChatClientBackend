@@ -13,7 +13,7 @@ router.use(bodyParser.json());
 router.post("/", (req, res) => {
     let email = req.body['email'];
 
-    let query = `SELECT conversations.chatid, conversations.name
+    let query = `SELECT conversations.chatid, conversations.name,conversationmembers.verified
              FROM conversations, conversationmembers, members
              WHERE conversations.chatid = conversationmembers.chatid AND conversationmembers.memberid = members.memberid AND
              email = $1`
