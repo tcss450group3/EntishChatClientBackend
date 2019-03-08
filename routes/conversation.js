@@ -90,4 +90,23 @@ router.post("/new", (req, res) => {
  });
 
 
+ router.post("/accept", (req, res) => {
+
+    let chatid = req.body['chatid'];
+    let memberid = req.body['memberid'];
+    
+    db.manyOrNone('UPDATE conversationmembers SET verified = -1 WHERE chatid = $1 AND memberid = $2', [chatid, memberid])
+    .then(() => {
+        res.send({
+            success: true
+        })
+    }).catch((error) => {
+        console.log(error);
+        res.send({
+            success: false,
+            error: error
+        })
+    });
+ });
+
 module.exports = router;
