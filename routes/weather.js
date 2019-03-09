@@ -101,7 +101,7 @@ router.post("/save", (req, res) => {
     let lat = req.body['lat']; 
     let long = req.body['long']; 
     let zip = req.body['zip'];   
-    let query = `INSERT INTO LOCATIONS(MEMBERID, NICKEAME, LAT, LONG, ZIP) VALUES($1, $2, $3, $4, $5)`
+    let query = `INSERT INTO LOCATIONS(MEMBERID, NICKNAME, LAT, LONG, ZIP) VALUES($1, $2, $3, $4, $5)`
     db.manyOrNone(query, [memberid, nickname, lat, long, zip])
     .then((rows) => {
         res.send({
