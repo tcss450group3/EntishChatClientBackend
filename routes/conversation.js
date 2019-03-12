@@ -17,7 +17,7 @@ router.post("/", (req, res) => {
              FROM conversations, conversationmembers, members
              WHERE conversations.chatid = conversationmembers.chatid AND conversationmembers.memberid = members.memberid AND
              email = $1
-             ORDER BY conversationmembers.verified, conversationmembers.unread ASC`
+             ORDER BY conversationmembers.verified+0, conversationmembers.unread+0 DESC`
     db.manyOrNone(query, [email])
     .then((data) => {
         res.send({
