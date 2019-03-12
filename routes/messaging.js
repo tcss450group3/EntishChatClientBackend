@@ -79,7 +79,7 @@ router.post("/read", (req, res) => {
     let chatId = req.body['chatid'];
     let memberid = req.body['memberid'];
           
-ldb.none('UPDATE conversationmembers SET unread = -1 where chatid = $1 AND memberid = $2',[chatId, memberid] )
+db.none('UPDATE conversationmembers SET unread = -1 where chatid = $1 AND memberid = $2',[chatId, memberid] )
 .then(() => {
     res.send({
         success: true
