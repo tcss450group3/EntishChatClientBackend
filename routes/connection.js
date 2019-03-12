@@ -15,8 +15,11 @@ router.use(bodyParser.json());
 //add a new connection by username
 router.post("/new", (req, res) => {
 
-    let sender = req.body['sender'];
+    //The person this request is being sent to
     let username = req.body['username'];
+
+    //The person sending this request
+    let sender = req.body['sender'];
     let MemberID_A = req.body['id'];
     
     if(username !=0){
@@ -59,7 +62,7 @@ router.post("/new", (req, res) => {
                         console.log(error);
                         res.send({
                             success: false,
-                            error: error,
+                            error: "could not insert new connection" + error,
                         })
                     });
             }
@@ -69,7 +72,7 @@ router.post("/new", (req, res) => {
             console.log(error);
             res.send({
                 success: false,
-                error: error
+                error: " couldn't find the requested username to make a connection" + error
             })
         });
     } else {
