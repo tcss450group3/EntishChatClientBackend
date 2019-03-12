@@ -30,9 +30,17 @@ router.post("/send", (req, res) => {
             rows.forEach(element => {
                 msg_functions.sendToIndividual(element['token'], message, username, chatId);
             });
-            res.send({
-                success: true
-            });
+                db.none('UPDATE conversationmembers SET unread = 0 where chatid = $1',[chatId] )
+                .then(() => {
+                    res.send({
+                        success: true
+                    });
+                }).catch(err => {
+                    res.send({
+                        success: false,
+                        error: err,
+                    });
+                })
         }).catch(err => {
             res.send({
                 success: false,
