@@ -13,10 +13,11 @@ router.use(bodyParser.json());
 router.post("/", (req, res) => {
     let email = req.body['email'];
 
-    let query = `SELECT conversations.chatid, conversations.name,conversationmembers.verified
+    let query = `SELECT conversations.chatid, conversations.name,                   conversationmembers.verified
              FROM conversations, conversationmembers, members
              WHERE conversations.chatid = conversationmembers.chatid AND conversationmembers.memberid = members.memberid AND
-             email = $1`
+             email = $1
+             ORDER BY conversationmembers.verified`
     db.manyOrNone(query, [email])
     .then((data) => {
         res.send({
