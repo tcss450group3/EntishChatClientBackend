@@ -36,6 +36,7 @@ router.post("/new", (req, res) => {
                 rows.forEach(element => {
                     if(element['match']) match = true;
                 });
+            });
             if (MemberID_A == MemberID_B) {
                 res.send({
                     success: false,
@@ -66,8 +67,6 @@ router.post("/new", (req, res) => {
                         })
                     });
             }
-
-        });
         }).catch((error) => {
             console.log(error);
             res.send({
